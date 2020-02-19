@@ -116,7 +116,7 @@ while (True):
     frame = _erode(frame)
     frame = _erode(frame)
     frame = _dilate(frame)
-    cv2.circle(original_frame, center_coordinates, 4, fcolor, 2)
+    #cv2.circle(original_frame, center_coordinates, 4, fcolor, 2)
     
     contours = []
     contours = _find_contours(frame)
@@ -131,17 +131,20 @@ while (True):
 
         contours_poly = cv2.approxPolyDP(target, 3, True)
         boundRect = cv2.boundingRect(contours_poly)
-        center, radius = cv2.minEnclosingCircle(contours_poly)
+        #center, radius = cv2.minEnclosingCircle(contours_poly)
+
+        X = boundRect[0] + boundRect[2]/2
+        Y = boundRect[1] + boundRect[3]
        
         
         cv2.rectangle(original_frame, (int(boundRect[0]), int(boundRect[1])), (int(boundRect[0]+boundRect[2]), int(boundRect[1]+boundRect[3])), color, 2)
-        cv2.circle(original_frame, (int(center[0]), int(center[1])), int(radius), color1, 2)
-        cv2.circle(original_frame, (int(center[0]), int(center[1])), 2, color1, 4)
+        #cv2.circle(original_frame, (int(center[0]), int(center[1])), int(radius), color1, 2)
+        #cv2.circle(original_frame, (int(center[0]), int(center[1])), 2, color1, 4)
         
-        table.putString('DB/String 0', "Eje X: " + str(center[0] - IMAGE_WIDTH/2))
-        table.putString('DB/String 1', "Eje Y: " + str(center[1] - IMAGE_HEIGHT/2))
-        table.putNumber('DB/Slider 0', str(center[0] - IMAGE_WIDTH/2))
-        table.putNumber('DB/Slider 1', str(center[1] - IMAGE_HEIGHT/2))
+        table.putString('DB/String 0', "Eje X: " + str(X - IMAGE_WIDTH/2))
+        table.putString('DB/String 1', "Eje Y: " + str(IMAGE_HEIGHT - Y))
+        table.putNumber('DB/Slider 0', str(X - IMAGE_WIDTH/2))
+        table.putNumber('DB/Slider 1', str(IMAGE_HEIGHT - Y))
         
         frame =  cv2.drawContours(original_frame, contours, -1, (255,100,0), 3)
         
